@@ -2,9 +2,15 @@ package routes
 
 import (
 	"github.com/ImanAski/janotan-api/controllers"
-	"github.com/labstack/echo"
+	echojwt "github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
 )
 
 func UserRoute(e *echo.Echo) {
-	e.POST("/user", controllers.CreateUser)
+	r := e.Group("/user")
+
+	r.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey: []byte("secret"),
+	}))
+	r.POST("/user", controllers.CreateUser)
 }

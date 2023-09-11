@@ -5,7 +5,7 @@ import (
 
 	"github.com/ImanAski/janotan-api/database"
 	"github.com/ImanAski/janotan-api/routes"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
