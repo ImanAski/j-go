@@ -12,5 +12,5 @@ func UserRoute(e *echo.Echo) {
 	r.Use(echojwt.WithConfig(echojwt.Config{
 		SigningKey: []byte("secret"),
 	}))
-	r.POST("/user", controllers.CreateUser)
+	r.GET("/", controllers.GetUser)
 }

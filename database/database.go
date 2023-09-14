@@ -41,6 +41,7 @@ func ConnectDb() {
 	log.Println("Connected to the Database")
 	log.Println("Migrating Models...")
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Course{})
 
 	DB = DbInstance{
 		Db: db,

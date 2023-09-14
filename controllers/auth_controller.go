@@ -59,6 +59,7 @@ func Login(c echo.Context) error {
 	claims := token.Claims.(jwt.MapClaims)
 	claims["name"] = user.Name + " " + user.LastName
 	claims["admin"] = user.Admin
+	claims["email"] = user.Email
 	claims["exp"] = time.Now().UTC().Add(time.Hour).Unix()
 
 	t, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
@@ -77,11 +78,6 @@ func Login(c echo.Context) error {
 
 func Register(c echo.Context) error {
 
-	userResponse := responses.UserResponse{
-		Status:  http.StatusOK,
-		Message: "User Registered",
-		Data:    nil,
-	}
 	name := c.FormValue("name")
 	lastName := c.FormValue("last_name")
 	phoneNumber := c.FormValue("phone_number")
@@ -121,5 +117,23 @@ func Register(c echo.Context) error {
 		}
 		return c.JSON(http.StatusUnauthorized, userResponse)
 	}
-	return c.JSON(http.StatusOK, userResponse)
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["name"] = user.Name + " " + user.LastName
+	claims["admin"] = user.Admin
+	claims["email"] = user.Email
+	claims["exp"] = time.Now().UTC().Add(time.Hour).Unix()
+
+	t, err := token.SignedString([]byte(os.Getenv("JWT_KEY")))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, responses.UserResponse{
+		Status:  http.StatusOK,
+		Message: "success",
+		Data: &echo.Map{
+			"token": t,
+		},
+	})
 }
